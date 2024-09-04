@@ -2,13 +2,13 @@ package types;
 
 import java.util.Objects;
 
-public class Transactions {
+public class Transaction {
     private String description;
     private Double amount ;
     private String date;
 
     // Constructor
-    public Transactions(String description, Double amount, String date) {
+    public Transaction(String description, Double amount, String date) {
         this.amount = amount;
         this.description = description;
         this.date = date;
@@ -51,7 +51,7 @@ public class Transactions {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Transactions that = (Transactions) o;
+        Transaction that = (Transaction) o;
         return Double.compare(that.amount, amount) == 0 && Objects.equals(description, that.description) && Objects.equals(date, that.date);
     }
 
