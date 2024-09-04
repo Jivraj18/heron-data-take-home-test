@@ -78,11 +78,9 @@ public class Main {
     }
 
     private static boolean isTransactionSimilar(Transaction newTransaction, Transaction oldTransaction) {
-        if(isSimilarDescription(newTransaction, oldTransaction) &&
-                isWithinRange(newTransaction.getAmount(), oldTransaction.getAmount()  - GRACE_AMOUNT, oldTransaction.getAmount() + GRACE_AMOUNT ) &&
-                (isMonthly(newTransaction, oldTransaction) || isWeekly(newTransaction, oldTransaction))
-        ) return true;
-        return false;
+        return isSimilarDescription(newTransaction, oldTransaction) &&
+                isWithinRange(newTransaction.getAmount(), oldTransaction.getAmount() - GRACE_AMOUNT, oldTransaction.getAmount() + GRACE_AMOUNT) &&
+                (isMonthly(newTransaction, oldTransaction) || isWeekly(newTransaction, oldTransaction));
     }
 
     private static boolean isMonthly(Transaction newTransaction, Transaction oldTransaction) {
@@ -94,7 +92,7 @@ public class Main {
         long daysBetween = ChronoUnit.DAYS.between(newDate, oldDate);
 
         boolean isOneMonth = monthsBetween == 1 || monthsBetween==-1;
-        boolean isGracePeriod = Math.abs(daysBetween) <= 31 + 3;
+        boolean isGracePeriod = Math.abs(daysBetween) <= 31 + DAY_GRACE_PERIOD;
 
         return isOneMonth && isGracePeriod;
     }
@@ -107,7 +105,7 @@ public class Main {
         long daysBetween = ChronoUnit.DAYS.between(newDate, oldDate);
 
         boolean isOneWeek = weeksBetween == 1 || weeksBetween==-1;
-        boolean isGracePeriod = Math.abs(daysBetween) <= 7 + 3;
+        boolean isGracePeriod = Math.abs(daysBetween) <= 7 + DAY_GRACE_PERIOD;
 
         return isOneWeek && isGracePeriod;
     }
@@ -125,7 +123,7 @@ public class Main {
     private static boolean isSimilarString(String s1, String s2) {
         if(s1.equals(s2)) return true;
         int distance = levenshteinDistance(s1, s2);
-        double similarityScore = 1.0 - (double) distance / Math.max(s1.length(), s2.length());;
+        double similarityScore = 1.0 - (double) distance / Math.max(s1.length(), s2.length());
         return similarityScore >= SIMILARITY_PERCENTAGE_CAP;
     }
 
